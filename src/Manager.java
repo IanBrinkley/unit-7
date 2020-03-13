@@ -1,0 +1,106 @@
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Manager {
+
+    public static final double MANAGER_WAGE = 9.50;
+    public static final double BASE_WAGE = 10.00;
+
+    private String name;
+    private int age;
+    private double hoursWorked;
+    private boolean atWork;
+    private BurgerByte managingBranch;
+    //private List<Cashier> cashiers;
+    //private List<FryCook> fryCooks;
+
+    public Manager(String name, int age) {
+        this.name = name;
+        this.age = age;
+        hoursWorked = 0;
+        atWork = false;
+        //cashiers = new ArrayList<>();
+        //fryCooks = new ArrayList<>();
+    }
+
+    // getters
+    public String getName() { return name; }
+    public int getAge() { return age; }
+    public boolean isAtWork() { return atWork; }
+    public double getHoursWorked() { return hoursWorked; }
+    public BurgerByte getManagingBranch() { return managingBranch; }
+    public List<Cashier> getCashiers() { return managingBranch.getCashiers(); }
+    public List<FryCook> getFryCooks() { return managingBranch.getFryCooks(); }
+
+    // MODIFIES: this
+    // EFFECTS: adds hours to the hoursWorked field
+    private void logHoursWorked(double hours) {
+        hoursWorked += hours;
+    }
+
+    // REQUIRES: hours >= 0
+    // MODIFIES: this
+    // EFFECTS: opens this Manager's BurgerByte, sets atWork to true, and logs
+    //          hours worked
+    public void startWork(double hours) {
+        managingBranch.openRestaurant();
+        atWork = true;
+        logHoursWorked(hours);
+        System.out.println("We are open for the day!");
+    }
+
+    // MODIFIES: this
+    // EFFECTS: closes this Manager's BurgerByte, set atWork to false
+    public void leaveWork() {
+        managingBranch.closeRestaurant();
+        atWork = false;
+        System.out.println("We are closed for the day!");
+    }
+
+    // EFFECTS: returns the total amount of wages this Manager made
+    public double computeWage() {
+        return (hoursWorked * (MANAGER_WAGE + BASE_WAGE));
+    }
+
+    // EFFECTS: set this managingBranch to managingBranch
+    public void setManagingBranch(BurgerByte managingBranch) {
+        this.managingBranch = managingBranch;
+    }
+
+    // REQUIRES: c must not be in already in team and this Manager's restaurant
+    // MODIFIES: this
+    // EFFECTS: adds given c to team and this Manager's restaurant
+    /*
+    public void hire(Cashier c) {
+        managingBranch.addCashier(c);
+        cashiers.add(c);
+        System.out.println("Welcome aboard, " + c.getName() + "!");
+    }
+
+    // REQUIRES: fc must not be in already in team and this Manager's restaurant
+    // MODIFIES: this
+    // EFFECTS: adds given fc to team and this Manager's restaurant
+    public void hire(FryCook fc) {
+        fryCooks.add(fc);
+        System.out.println("Welcome aboard, " + fc.getName() + "!");
+    }
+    */
+
+    // REQUIRES: c must be in this team and and this Manager's restaurant
+    // MODIFIES: this
+    // EFFECTS: removes given Cashier from team and this Manager's restaurant
+    public void fire(Cashier c) {
+        managingBranch.removeCashier(c);
+        System.out.println("Sorry to let you go, " + c.getName() + ".");
+    }
+
+    // REQUIRES: fc must be in this team and and this Manager's restaurant
+    // MODIFIES: this
+    // EFFECTS: removes given fc from team and this Manager's restaurant
+    public void fire(FryCook fc) {
+        managingBranch.removeFrycook(fc);
+        System.out.println("Sorry to let you go, " + fc.getName() + ".");
+    }
+}
